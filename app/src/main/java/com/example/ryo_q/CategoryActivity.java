@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
@@ -21,6 +22,10 @@ public class CategoryActivity extends AppCompatActivity {
     LinearLayout languageLayout;
     LinearLayout DifficultyLayout;
 
+    // เครื่องหมายถูกของแต่ละการ์ด ไฮไลต์ตอนเลือก
+    ImageView javaCheck, cppCheck, pythonCheck;
+    ImageView easyCheck, normalCheck, hardCheck;
+
     private String selectedLanguage = "";
     private String selectedDifficulty = "";
 
@@ -32,11 +37,15 @@ public class CategoryActivity extends AppCompatActivity {
 
         languageLayout = findViewById(R.id.languageLayout);
         DifficultyLayout = findViewById(R.id.difficultyLayout);
-        
+
         // Language
         btnJava = findViewById(R.id.javaButton);
         btnCpp = findViewById(R.id.cppButton);
         btnPython = findViewById(R.id.pythonButton);
+
+        javaCheck = findViewById(R.id.javaCheck);
+        cppCheck = findViewById(R.id.cppCheck);
+        pythonCheck = findViewById(R.id.pythonCheck);
 
         // Difficulty
         btnEasy = findViewById(R.id.easyButton);
@@ -44,8 +53,10 @@ public class CategoryActivity extends AppCompatActivity {
         btnHard = findViewById(R.id.hardButton);
         btnStart = findViewById(R.id.startButton);
 
-        //ซ่อนปุ่มความยาก
-        
+        easyCheck = findViewById(R.id.easyCheck);
+        normalCheck = findViewById(R.id.normalCheck);
+        hardCheck = findViewById(R.id.hardCheck);
+
         //เลือกภาษา
         if (btnJava != null) {
             btnJava.setOnClickListener(v -> selectLanguage(GameConstants.LANG_JAVA));
@@ -67,9 +78,9 @@ public class CategoryActivity extends AppCompatActivity {
             btnHard.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_HARD));
         }
 
-        if (btnStart != null) {
-            btnStart.setOnClickListener(v -> startGame());
-        }
+        //if (btnStart != null) {
+        //    btnStart.setOnClickListener(v -> startGame());
+        // }
 
         // ใส่แอนิเมชันให้ปุ่ม
         setupButtonsAnimation();
@@ -92,54 +103,93 @@ public class CategoryActivity extends AppCompatActivity {
             v.setPadding(0, 0, 0, 0);
             return insets;
         });
-
-
     }
 
     private void selectLanguage(String language) {
         selectedLanguage = language;
+
+        resetLanguageCards();
+
+        if (language.equals(GameConstants.LANG_JAVA)) {
+            if (btnJava != null) btnJava.setBackgroundResource(R.drawable.bg_card_button_selected);
+            if (javaCheck != null) javaCheck.setVisibility(View.VISIBLE);
+        } else if (language.equals(GameConstants.LANG_CPP)) {
+            if (btnCpp != null) btnCpp.setBackgroundResource(R.drawable.bg_card_button_selected);
+            if (cppCheck != null) cppCheck.setVisibility(View.VISIBLE);
+        } else if (language.equals(GameConstants.LANG_PYTHON)) {
+            if (btnPython != null) btnPython.setBackgroundResource(R.drawable.bg_card_button_selected);
+            if (pythonCheck != null) pythonCheck.setVisibility(View.VISIBLE);
+        }
+
         showDifficulty();
+    }
+
+    private void resetLanguageCards() {
+        if (btnJava != null) btnJava.setBackgroundResource(R.drawable.bg_card_button);
+        if (btnCpp != null) btnCpp.setBackgroundResource(R.drawable.bg_card_button);
+        if (btnPython != null) btnPython.setBackgroundResource(R.drawable.bg_card_button);
+
+        if (javaCheck != null) javaCheck.setVisibility(View.GONE);
+        if (cppCheck != null) cppCheck.setVisibility(View.GONE);
+        if (pythonCheck != null) pythonCheck.setVisibility(View.GONE);
     }
 
     private void selectDifficulty(String difficulty) {
         selectedDifficulty = difficulty;
+
+        resetDifficultyCards();
+
+        if (difficulty.equals(GameConstants.DIFF_EASY)) {
+            if (btnEasy != null) btnEasy.setBackgroundResource(R.drawable.bg_card_button_selected);
+            if (easyCheck != null) easyCheck.setVisibility(View.VISIBLE);
+        } else if (difficulty.equals(GameConstants.DIFF_NORMAL)) {
+            if (btnNormal != null) btnNormal.setBackgroundResource(R.drawable.bg_card_button_selected);
+            if (normalCheck != null) normalCheck.setVisibility(View.VISIBLE);
+        } else if (difficulty.equals(GameConstants.DIFF_HARD)) {
+            if (btnHard != null) btnHard.setBackgroundResource(R.drawable.bg_card_button_selected);
+            if (hardCheck != null) hardCheck.setVisibility(View.VISIBLE);
+        }
+
         if (btnStart != null) {
             btnStart.setVisibility(View.VISIBLE);
-            // เพิ่ม Animation เล็กน้อยตอนโผล่มา
             btnStart.setAlpha(0f);
             btnStart.animate().alpha(1f).setDuration(500).start();
         }
     }
 
+    private void resetDifficultyCards() {
+        if (btnEasy != null) btnEasy.setBackgroundResource(R.drawable.bg_card_button);
+        if (btnNormal != null) btnNormal.setBackgroundResource(R.drawable.bg_card_button);
+        if (btnHard != null) btnHard.setBackgroundResource(R.drawable.bg_card_button);
+
+        if (easyCheck != null) easyCheck.setVisibility(View.GONE);
+        if (normalCheck != null) normalCheck.setVisibility(View.GONE);
+        if (hardCheck != null) hardCheck.setVisibility(View.GONE);
+    }
+
     private void showDifficulty() {
-        languageLayout.setVisibility(View.GONE);
+        languageLayout.setVisibility(View.VISIBLE);
         DifficultyLayout.setVisibility(View.VISIBLE);
-        // สามารถเพิ่ม Animation ตรงนี้ได้
     }
 
-
-    private void startGame() {
-        // TODO: ส่งข้อมูลไปยัง Activity ถัดไป (เช่น GameActivity)
-        // Intent intent = new Intent(this, GameActivity.class);
-        // intent.putExtra("language", selectedLanguage);
-        // intent.putExtra("difficulty", selectedDifficulty);
-        // startActivity(intent);
-    }
+    // private void startGame() {
+    //    android.content.Intent intent = new android.content.Intent(this, GameplayActivity.class);
+    //    intent.putExtra("language", selectedLanguage);
+    //     intent.putExtra("difficulty", selectedDifficulty);
+    //    startActivity(intent);
+    // }
 
     // --- ระบบแอนิเมชันปุ่ม ---
     private void setupButtonsAnimation() {
-        // ปุ่มภาษา
         setupButtonTouchAnimation(btnJava);
         setupButtonTouchAnimation(btnCpp);
         setupButtonTouchAnimation(btnPython);
-        
-        // ปุ่มความยาก
+
         setupButtonTouchAnimation(btnEasy);
         setupButtonTouchAnimation(btnNormal);
         setupButtonTouchAnimation(btnHard);
         setupButtonTouchAnimation(btnStart);
 
-        // แอนิเมชันลอย (Floating) Layout
         startFloatingAnimation(languageLayout, 0);
         startFloatingAnimation(DifficultyLayout, 0);
     }
@@ -173,5 +223,3 @@ public class CategoryActivity extends AppCompatActivity {
         animator.start();
     }
 }
-
-

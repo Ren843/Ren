@@ -24,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
- //hide ActionBar
+        //hide ActionBar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -51,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
     private void setupButtons() {
         View btnPlay = findViewById(R.id.btnMenuPlay);
         View btnExit = findViewById(R.id.btnMenuExit);
-    //Animation Button Floating
+        //Animation Button Floating
         if (btnPlay != null) {
-            setupButtonTouchAnimation(btnPlay);
-            startFloatingAnimation(btnPlay, 0);
+            //setupButtonTouchAnimation(btnPlay);
+            //startFloatingAnimation(btnPlay, 0);
             btnPlay.setOnClickListener(v -> {
                 Log.d("UI", "Play Button Clicked");
                 android.content.Intent intent = new android.content.Intent(MainActivity.this, CategoryActivity.class);
@@ -63,16 +62,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (btnExit != null) {
-            setupButtonTouchAnimation(btnExit);
-            startFloatingAnimation(btnExit, 500);
+            //setupButtonTouchAnimation(btnExit);
+            //startFloatingAnimation(btnExit, 500);
             btnExit.setOnClickListener(v -> {
                 Log.d("UI", "Exit Button Clicked");
                 finish();
             });
         }
     }
+
     //Animation Button
-    private void setupButtonTouchAnimation(View view){
+    private void setupButtonTouchAnimation(View view) {
         view.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
