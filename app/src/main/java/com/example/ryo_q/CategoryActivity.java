@@ -78,9 +78,9 @@ public class CategoryActivity extends AppCompatActivity {
             btnHard.setOnClickListener(v -> selectDifficulty(GameConstants.DIFF_HARD));
         }
 
-        //if (btnStart != null) {
-        //    btnStart.setOnClickListener(v -> startGame());
-        // }
+        if (btnStart != null) {
+            btnStart.setOnClickListener(v -> startGame());
+         }
 
         // ใส่แอนิเมชันให้ปุ่ม
         setupButtonsAnimation();
@@ -172,12 +172,12 @@ public class CategoryActivity extends AppCompatActivity {
         DifficultyLayout.setVisibility(View.VISIBLE);
     }
 
-    // private void startGame() {
-    //    android.content.Intent intent = new android.content.Intent(this, GameplayActivity.class);
-    //    intent.putExtra("language", selectedLanguage);
-    //     intent.putExtra("difficulty", selectedDifficulty);
-    //    startActivity(intent);
-    // }
+     private void startGame() {
+        android.content.Intent intent = new android.content.Intent(this, GameplayActivity.class);
+        intent.putExtra("language", selectedLanguage);
+         intent.putExtra("difficulty", selectedDifficulty);
+        startActivity(intent);
+     }
 
     // --- ระบบแอนิเมชันปุ่ม ---
     private void setupButtonsAnimation() {
