@@ -215,7 +215,7 @@ public class QuestionRepository {
 
         // 4. ตรวจสอบการใช้ค่า Boolean ใน Python (ต้องขึ้นต้นด้วยตัวใหญ่: True/False)
         list.add(new Question("while true:\n    break",
-                new String[]{"while True:\n    break", "while(true):", "do while True:"},
+                 new String[]{"while True:\n    break", "while(true):", "do while True:"},
                 0, GameConstants.LANG_PYTHON, GameConstants.DIFF_EASY));
 
         // 5. ตรวจสอบกฎการย่อหน้า (Indentation) ของ Python ซึ่งสำคัญมากต่อการทำงาน
