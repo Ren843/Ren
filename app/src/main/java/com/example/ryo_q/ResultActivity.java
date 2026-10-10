@@ -13,6 +13,11 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // ซ่อน Status Bar
+        getWindow().setFlags(
+                android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
         setContentView(R.layout.activity_result);
 
         int stars = getIntent().getIntExtra("stars", 0);
@@ -28,7 +33,15 @@ public class ResultActivity extends AppCompatActivity {
         ImageView star3 = findViewById(R.id.star3);
         View btnPlayAgain = findViewById(R.id.btnPlayAgain);
         View btnExitHome = findViewById(R.id.btnExitHome);
-
+        View btnReview = findViewById(R.id.btnReview);
+        if (btnReview != null) {
+            btnReview.setOnClickListener(v -> {
+                Intent reviewIntent = new Intent(ResultActivity.this, ReviewActivity.class);
+                reviewIntent.putExtra("questionList", (java.io.Serializable) getIntent().getSerializableExtra("questionList"));
+                reviewIntent.putExtra("selectedAnswers", (java.io.Serializable) getIntent().getSerializableExtra("selectedAnswers"));
+                startActivity(reviewIntent);
+            });
+        }
         if (resultTitle != null) {
             resultTitle.setText(stars > 0 ? "Robot Repaired!" : "Try Again");
         }
@@ -63,7 +76,7 @@ public class ResultActivity extends AppCompatActivity {
 
     private void setStarFilled(ImageView star, boolean filled) {
         if (star == null) return;
-        star.setImageResource(filled ? R.drawable.ic_check_circle : R.drawable.ic_check_circle);
-        star.setAlpha(filled ? 1.0f : 0.25f);
+        star.setImageResource(R.drawable.star);
+        star.setAlpha(filled ? 1.0f : 0.3f);
     }
 }

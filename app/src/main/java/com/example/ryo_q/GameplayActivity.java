@@ -1,11 +1,15 @@
 package com.example.ryo_q;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
 
 public class GameplayActivity extends AppCompatActivity {
 
@@ -15,8 +19,7 @@ public class GameplayActivity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private long timeLeftMs;
 
-    private TextView textCodeSnippet;
-    private TextView textTimer;
+    private TextView textCodeSnippet, textTimer, textQuestionPrompt;
     private Button option1Button, option2Button, option3Button;
 
     private int totalStarsEarned = 0;
@@ -25,10 +28,16 @@ public class GameplayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // ซ่อน Status Bar
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
         setContentView(R.layout.activity_gameplay);
 
         textCodeSnippet = findViewById(R.id.textCodeSnippet);
         textTimer = findViewById(R.id.textTimer);
+        textQuestionPrompt = findViewById(R.id.textQuestionPrompt);
         option1Button = findViewById(R.id.option1Button);
         option2Button = findViewById(R.id.option2Button);
         option3Button = findViewById(R.id.option3Button);
@@ -42,6 +51,7 @@ public class GameplayActivity extends AppCompatActivity {
         showCurrentQuestion();
     }
 
+
     private void showCurrentQuestion() {
         Question current = quizManager.getCurrentQuestion();
 
@@ -50,7 +60,11 @@ public class GameplayActivity extends AppCompatActivity {
             return;
         }
 
+
         textCodeSnippet.setText(current.getCodeSnippet());
+        if (textQuestionPrompt != null) {
+            textQuestionPrompt.setText(current.getQuestionText());
+        }
 
         String[] options = current.getOptions();
         option1Button.setText(options.length > 0 ? options[0] : "");
@@ -67,10 +81,6 @@ public class GameplayActivity extends AppCompatActivity {
     private void startTimer() {
         if (countDownTimer != null) {
             countDownTimer.cancel();
-        }
-        //ซ่อนแถบขาวๆ
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
         }
 
         timeLeftMs = QUESTION_TIME_MS;
@@ -103,11 +113,16 @@ public class GameplayActivity extends AppCompatActivity {
         } else {
             finishGame();
         }
+        //ซ่อนแถบขาวๆ
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
     }
 
     private void finishGame() {
         int totalQuestions = quizManager.getTotalQuestions();
         int finalStars = 0;
+
 
         if (totalQuestions > 0) {
             double average = (double) totalStarsEarned / totalQuestions;
@@ -118,10 +133,14 @@ public class GameplayActivity extends AppCompatActivity {
         ScoreManager.saveStars(this, language, difficulty, finalStars);
 
 
-         android.content.Intent intent = new android.content.Intent(this, ResultActivity.class);
+         Intent intent = new Intent(this, ResultActivity.class);
          intent.putExtra("stars", finalStars);
          intent.putExtra("correctCount", quizManager.getCorrectCount());
          intent.putExtra("totalQuestions", totalQuestions);
+         intent.putExtra("language", language);
+         intent.putExtra("difficulty", difficulty);
+         intent.putExtra("questionList", new ArrayList<>(quizManager.getQuestionList()));
+         intent.putExtra("selectedAnswers", new ArrayList<>(quizManager.getSelectedAnswers()));
          startActivity(intent);
          finish();
     }
