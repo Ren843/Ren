@@ -6,6 +6,9 @@ import java.io.Serializable;
  // รองรับ Serializable เพื่อให้สามารถส่ง Object ผ่าน Intent ระหว่าง Activity ได้
 public class Question implements Serializable {
 
+    // โจทย์หรือคำอธิบายคำถาม (นำมาจากคอมเมนต์)
+    private String questionText;
+
     // ส่วนของโค้ดโปรแกรมที่จะแสดงให้ผู้ใช้ดู
     private String codeSnippet;
     
@@ -21,8 +24,19 @@ public class Question implements Serializable {
     // ระดับความยากของคำถาม (EASY, NORMAL, HARD)
     private String difficulty;
 
-    // คอนสตรักเตอร์สำหรับสร้าง Object ของ Question พร้อมกำหนดค่าเริ่มต้น
+    // คอนสตรักเตอร์แบบมีข้อความโจทย์
+    public Question(String questionText, String codeSnippet, String[] options, int correctAnswerIndex, String language, String difficulty) {
+        this.questionText = questionText;
+        this.codeSnippet = codeSnippet;
+        this.options = options;
+        this.correctAnswerIndex = correctAnswerIndex;
+        this.language = language;
+        this.difficulty = difficulty;
+    }
+
+    // คอนสตรักเตอร์แบบเดิม (รองรับกรณีไม่ได้ใส่ข้อความโจทย์)
     public Question(String codeSnippet, String[] options, int correctAnswerIndex, String language, String difficulty) {
+        this.questionText = "Fix the bug in the following code:";
         this.codeSnippet = codeSnippet;
         this.options = options;
         this.correctAnswerIndex = correctAnswerIndex;
@@ -31,6 +45,7 @@ public class Question implements Serializable {
     }
 
     // Getter Methods
+    public String getQuestionText() { return questionText; }
     public String getCodeSnippet() { return codeSnippet; }
     
     public String[] getOptions() { return options; }

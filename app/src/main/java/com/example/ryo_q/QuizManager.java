@@ -1,15 +1,19 @@
 package com.example.ryo_q;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuizManager {
     private List<Question> questionList;
     private int currentIndex;
     private int corentCount;
+    private List<Integer> selectedAnswers = new ArrayList<>();
 
     //โหลดโจทย์ตามภาษา ความยาก
     public void startGame(String language, String difficulty) {
         questionList = QuestionRepository.getQuestions(language, difficulty);
+        selectedAnswers.clear();
         currentIndex = 0;
         corentCount = 0;
     }
@@ -49,12 +53,24 @@ public class QuizManager {
         return corentCount;
     }
 
+    // คืนรายการคำถามทั้งหมดที่เล่นไปในด่านนี้ (สำหรับหน้าเฉลย)
+    public List<Question> getQuestionList() {
+        return questionList;
+    }
+
+    // คืนรายการคำตอบที่เลือกของแต่ละข้อ ตามลำดับเดียวกับ getQuestionList()
+    public List<Integer> getSelectedAnswers() {
+        return selectedAnswers;
+    }
+
+
     //ตรวจคำตอบ คืนtrueถ้าถูก
     public boolean checkAnswer(int selectedIndex) {
         Question current = getCurrentQuestion();
         if (current == null) {
             return false;
         }
+        selectedAnswers.add(selectedIndex); // บันทึกคำตอบที่เลือกไว้
         boolean correct = current.isCorrect(selectedIndex);
         if (correct) {
             corentCount++;
